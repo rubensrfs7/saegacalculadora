@@ -1,6 +1,6 @@
 {
-  "name": "Calculadora de Preços SAEGA",
-  "description": "Calculadora de preços personalizados para os planos Gestão e Consultoria da SAEGA baseada na quantidade de animais.",
+  "name": "Saega Formulador de Nutrição",
+  "description": "App multi-step para formular e analisar dietas de animais em tempo real.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

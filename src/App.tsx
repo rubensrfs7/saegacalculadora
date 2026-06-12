@@ -1,39 +1,75 @@
-import PricingCalculator from './components/PricingCalculator';
+import { useState } from 'react';
+import Header from './components/Header';
+import Stepper from './components/Stepper';
+import AnimalProfile from './components/steps/AnimalProfile';
+import Concentrate from './components/steps/Concentrate';
+import Volumoso from './components/steps/Volumoso';
+import FinalDiet from './components/steps/FinalDiet';
+import NavigationButtons from './components/NavigationButtons';
+import Report from './components/steps/Report';
+import { FormulationState, Step } from './types';
 
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-export interface PricingTier {
-  animals: number;
-  price: number;
+const INITIAL_STATE: FormulationState = {
+  name: '',
+  category: '',
+  subcategory: '',
+  weight: '',
+  quantity: 1,
+  days: 1,
+  concentrates: [],
+  volumosos: []
 }
-
-export type PlanType = 'Gestão' | 'Consultoria';
-
-export interface PlanConfig {
-  name: PlanType;
-  tiers: PricingTier[];
-}
-
-export const PRICING_DATA: Record<PlanType, PricingTier[]> = {
-  'Gestão': [
-    { animals: 50, price: 69.90 },
-    { animals: 150, price: 149.90 },
-    { animals: 500, price: 249.90 },
-  ],
-  'Consultoria': [
-    { animals: 50, price: 249.90 },
-    { animals: 150, price: 349.90 },
-    { animals: 500, price: 520.00 },
-  ],
-};
 
 export default function App() {
+  const [currentStep, setCurrentStep] = useState<Step>(1);
+  const [formulationData, setFormulationData] = useState<FormulationState>(INITIAL_STATE);
+
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5) as Step);
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1) as Step);
+
+  const updateData = (data: Partial<FormulationState>) => {
+    setFormulationData(prev => ({ ...prev, ...data }));
+  };
+
   return (
-    <div className="antialiased text-slate-900">
-      <PricingCalculator />
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-800 pb-12">
+      <Header />
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-8">
+        <Stepper currentStep={currentStep} />
+        
+        <div className="mt-8">
+          {currentStep === 1 && (
+            <>
+              <AnimalProfile data={formulationData} updateData={updateData} />
+              <NavigationButtons onNext={nextStep} />
+            </>
+          )}
+          {currentStep === 2 && (
+            <>
+              <Concentrate data={formulationData} updateData={updateData} />
+              <NavigationButtons onNext={nextStep} onPrev={prevStep} />
+            </>
+          )}
+          {currentStep === 3 && (
+            <>
+              <Volumoso data={formulationData} updateData={updateData} />
+              <NavigationButtons onNext={nextStep} onPrev={prevStep} />
+            </>
+          )}
+          {currentStep === 4 && (
+            <>
+              <FinalDiet data={formulationData} />
+              <NavigationButtons onNext={nextStep} onPrev={prevStep} />
+            </>
+          )}
+          {currentStep === 5 && (
+            <>
+              <Report data={formulationData} />
+              <NavigationButtons onPrev={prevStep} isLast />
+            </>
+          )}
+        </div>
+      </main>
     </div>
-  );
+  )
 }
