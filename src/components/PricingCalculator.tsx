@@ -60,7 +60,7 @@ export default function PricingCalculator() {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <p className="text-slate-400 text-lg">Calculadora de Preços Personalizados</p>
+              <p className="text-slate-400 text-lg">Calculadora de Preços</p>
             </div>
             {/* Decorative element */}
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
